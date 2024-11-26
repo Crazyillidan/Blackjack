@@ -91,6 +91,54 @@ def play_game():
         display_hand(dealer_hand, hide_first_card=True)
         print("\nYOUR CARDS:")
         display_hand(player_hand)
+
+        player_total = calculate_hand_value(player_hand)
+
+        while True:
+            if player_total > 21:
+                print("\nYOUR POINTS: ", player_total)
+                print("\nSorry. You lose.")
+                break
+
+            print("\nHit or stand? (hit/stand): ", end="")
+            choice = input().lower()
+
+            if choice ==  "hit":
+                player_hand.append(deck.pop())
+                print("\nYOUR CARDS:")
+                display_hand(player_hand)
+                player_total = calculate_hand_value(player_hand)
+            elif choice == "stand":
+                break
+            else:
+                print("Invalid choice, please choose 'hit' or 'stand'.")
+                
+        if player_total <= 21:
+            print("\nDEALER'S CARDS:")
+            dealer_total = calculate_hand_value(dealer_hand)
+            while dealer_total < 17:
+                dealer_hand.append(deck.pop())
+                dealer_total = calculate_hand_value(dealer_hand)
+            display_hand(dealer_hand)
+            print("\nYOUR POINTS:", player_total)
+            print("DEALER'S POINTS:", dealer_total)
+
+            if dealer_total > 21 or player_total > dealer_total:
+                print("\nCongratulations! You win!")
+                chips += bet * 2  
+            elif player_total < dealer_total:
+                print("\nSorry. You lose.")
+            else:
+                print("\nIt's a tie!")
+                chips += bet
+
+        db.write_chips(chips)
+        print(f"Money: {chips}")
+        play_again = input("\nPlay again? (y/n): ").lower()
+        if play_again != "y":
+            print("\nCome back soon!")
+            print("Bye!")
+            break
     
 def main():
     title()

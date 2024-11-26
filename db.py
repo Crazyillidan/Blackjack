@@ -7,6 +7,6 @@ def read_chips():
     else:   
         return 100
 
-def write_chips():
+def write_chips(chips):
     with open("chips.txt", "w") as file:
         file.write(str(chips))
