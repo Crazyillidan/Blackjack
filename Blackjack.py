@@ -93,6 +93,28 @@ def play_game():
         display_hand(player_hand)
 
         player_total = calculate_hand_value(player_hand)
+        if player_total == 21:
+            print("\nBlackjack!")
+            print("\nDEALER'S CARDS:")
+            display_hand(dealer_hand)
+            dealer_total = calculate_hand_value(dealer_hand)
+            
+            if dealer_total == 21:
+                print("\nIt's a tie!")
+                chips += bet
+            else:
+                payout = round(bet * 1.5, 2)
+                chips += bet + payout
+                print(f"\nYou win {payout} chips!")
+            db.write_chips(chips)
+            print(f"Money: {chips}")
+            play_again = input("\nPlay again? (y/n): ").lower()
+            if play_again != "y":
+                print("\nCome back soon!")
+                print("Bye!")
+                break
+            else:
+                continue
 
         while True:
             if player_total > 21:
