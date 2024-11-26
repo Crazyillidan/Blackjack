@@ -30,8 +30,12 @@ def calculate_hand_value(hand):
     return total
 
 
-def display_hand():
-    pass
+def display_hand(hand, hide_first_card=False):
+    if hide_first_card:
+        print(hand[1])
+    else:
+        for card in hand:
+            print(card)
 
 
 def buy_chips():
@@ -63,6 +67,30 @@ def play_game():
                 print("Come back soon!")
                 print("Bye!")
                 break
+            
+        while True:
+            try:
+                bet = float(input(f"Bet amount: "))
+                if 5 <= bet <= min(1000, chips):
+                    bet = round(bet, 2)
+                    break
+                else:
+                    print(f"Invalid bet. You must be bet between 5 and 1000.")
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+        chips -= bet
+        db.write_chips(chips)
+
+
+
+        deck = create_deck()
+        dealer_hand = [deck.pop(), deck.pop()]
+        player_hand = [deck.pop(), deck.pop()]
+
+        print("\nDEALER'S SHOW CARD:")
+        display_hand(dealer_hand, hide_first_card=True)
+        print("\nYOUR CARDS:")
+        display_hand(player_hand)
     
 def main():
     title()
